@@ -1,0 +1,19 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+**/Generated.xcconfig
+**/flutter_export_environment.sh
+
+# Android
+**/local.properties
+**/captures/
+**/.gradle/
+**/key.properties
+
+# IDE
+.idea/
+*.iml
+
+# Misc
+*.log
