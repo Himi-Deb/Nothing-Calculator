@@ -1,8 +1,8 @@
-/// Layout constants tuned to the shared Calci-App references.
+/// Layout constants tuned to the shared Calci-App references (edge-to-edge keypad).
 abstract final class AppLayout {
   static const double displayFraction = 0.40;
-  static const double keypadHorizontalPadding = 20;
-  static const double keypadBottomPadding = 24;
-  static const double keyGap = 8;
-  static const double headerIconSize = 22;
+  /// Flush to screen edges; no outer gutter around the keypad.
+  static const double keypadEdgeInset = 0;
+  static const double keyGap = 0;
+  static const double headerIconSize = 26;
 }

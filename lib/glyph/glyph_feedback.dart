@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 /// Abstraction over Nothing Glyph hardware. Use [GlyphFeedback.noop] in tests/emulators.
 abstract class GlyphFeedback {
   const GlyphFeedback();

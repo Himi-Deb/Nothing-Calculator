@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_typography.dart';
 
 /// Large result / operand with accent decimal dot (Calci-App reference).
 class PrimaryResultText extends StatelessWidget {
   const PrimaryResultText({
     super.key,
     required this.text,
-    this.style,
+    this.fontSize = 48,
   });
 
   final String text;
-  final TextStyle? style;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
-    final base = style ??
-        const TextStyle(
-          color: AppColors.activeText,
-          fontSize: 48,
-          fontWeight: FontWeight.w600,
-          letterSpacing: -0.5,
-          height: 1.05,
-        );
+    final base = AppTypography.primaryResult(fontSize: fontSize);
 
     final parts = text.split('.');
     if (parts.length == 1) {
@@ -33,12 +27,11 @@ class PrimaryResultText extends StatelessWidget {
       TextSpan(
         children: [
           TextSpan(text: parts[0], style: base),
-          const TextSpan(text: ' '),
           TextSpan(
             text: '●',
             style: base.copyWith(
               color: AppColors.decimalDot,
-              fontSize: (base.fontSize ?? 48) * 0.38,
+              fontSize: fontSize * 0.23,
             ),
           ),
           TextSpan(

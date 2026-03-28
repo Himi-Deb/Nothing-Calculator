@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_typography.dart';
 
 typedef NothingTap = void Function();
 
@@ -32,25 +33,16 @@ class NothingButton extends StatelessWidget {
             icon: icon!,
             color: fg,
             showDot: showFlaskDot,
+            iconSize: AppTypography.keyCapSize,
           )
         : Text(
             label!,
-            style: TextStyle(
-              color: fg,
-              fontSize: _fontSizeForLabel(label!),
-              fontWeight: FontWeight.w500,
-              height: 1.0,
-            ),
+            style: AppTypography.keyLabel(label!, fg),
           );
-
-    final pad = icon != null
-        ? const EdgeInsets.symmetric(vertical: 6, horizontal: 4)
-        : const EdgeInsets.symmetric(vertical: 14, horizontal: 4);
 
     return Material(
       color: backgroundColor ?? Colors.transparent,
-      clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadius.circular(4),
+      clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: onPressed == null
             ? null
@@ -61,18 +53,10 @@ class NothingButton extends StatelessWidget {
         splashColor: AppColors.accentRed.withValues(alpha: 0.12),
         highlightColor: Colors.white10,
         child: Center(
-          child: Padding(
-            padding: pad,
-            child: child,
-          ),
+          child: child,
         ),
       ),
     );
-  }
-
-  static double _fontSizeForLabel(String s) {
-    if (s.length >= 3) return 18;
-    return 26;
   }
 }
 
@@ -81,35 +65,40 @@ class _FlaskOrIcon extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.showDot,
+    required this.iconSize,
   });
 
   final IconData icon;
   final Color color;
   final bool showDot;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
     return FittedBox(
       fit: BoxFit.scaleDown,
       alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
+        alignment: Alignment.center,
+        clipBehavior: Clip.none,
         children: [
-          Icon(icon, color: color, size: 22),
-          AnimatedSlide(
-            duration: const Duration(milliseconds: 220),
-            curve: Curves.easeOutCubic,
-            offset: showDot ? Offset.zero : const Offset(0, 0.35),
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 180),
-              opacity: showDot ? 1 : 0,
-              child: Container(
-                margin: const EdgeInsets.only(top: 2),
-                width: 4,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
+          Icon(icon, color: color, size: iconSize),
+          Positioned(
+            bottom: -9,
+            child: AnimatedSlide(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              offset: showDot ? Offset.zero : const Offset(0, 0.35),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 180),
+                opacity: showDot ? 1 : 0,
+                child: Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
             ),

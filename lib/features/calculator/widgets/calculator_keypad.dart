@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_layout.dart';
+import '../../../core/theme/app_typography.dart';
 import '../controller/calculator_controller.dart';
 import 'nothing_button.dart';
 
@@ -24,17 +25,13 @@ class CalculatorKeypad extends StatelessWidget {
           ..._basicRows(),
         ];
         return Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppLayout.keypadHorizontalPadding,
-            8,
-            AppLayout.keypadHorizontalPadding,
-            AppLayout.keypadBottomPadding,
-          ),
+          padding: const EdgeInsets.all(AppLayout.keypadEdgeInset),
           child: Column(
             children: [
               for (var i = 0; i < rows.length; i++) ...[
                 Expanded(child: rows[i]),
-                if (i != rows.length - 1) SizedBox(height: AppLayout.keyGap),
+                if (i != rows.length - 1 && AppLayout.keyGap > 0)
+                  SizedBox(height: AppLayout.keyGap),
               ],
             ],
           ),
@@ -51,7 +48,7 @@ class CalculatorKeypad extends StatelessWidget {
           _sciLabel(
             child: NothingButton(
               label: 'INV',
-              foregroundColor: AppColors.historyGreyNewest,
+              foregroundColor: AppColors.activeText,
               onPressed: controller.applyInverse,
             ),
             caption: '1/x',
@@ -120,7 +117,7 @@ class CalculatorKeypad extends StatelessWidget {
           _sciLabel(
             child: NothingButton(
               label: '(',
-              foregroundColor: AppColors.historyGreyOldest,
+              foregroundColor: AppColors.activeText,
               onPressed: null,
             ),
             caption: 'left',
@@ -128,7 +125,7 @@ class CalculatorKeypad extends StatelessWidget {
           _sciLabel(
             child: NothingButton(
               label: ')',
-              foregroundColor: AppColors.historyGreyOldest,
+              foregroundColor: AppColors.activeText,
               onPressed: null,
             ),
             caption: 'right',
@@ -142,14 +139,14 @@ class CalculatorKeypad extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        child,
+        Expanded(child: Center(child: child)),
         const SizedBox(height: 2),
-        Text(
-          caption,
-          style: const TextStyle(
-            color: AppColors.historyGreyOldest,
-            fontSize: 10,
-            height: 1,
+        SizedBox(
+          height: 18,
+          child: Text(
+            caption,
+            style: AppTypography.scientificCaption(AppColors.historyGreyOldest),
+            textAlign: TextAlign.center,
           ),
         ),
       ],

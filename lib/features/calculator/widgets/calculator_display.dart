@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_layout.dart';
+import '../../../core/theme/app_typography.dart';
 import '../controller/calculator_controller.dart';
 import 'dot_matrix_operation.dart';
 import 'primary_result_text.dart';
@@ -20,9 +21,7 @@ class CalculatorDisplay extends StatelessWidget {
       listenable: controller,
       builder: (context, _) {
         final history = controller.history;
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 16, 8),
-          child: Column(
+        return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
@@ -32,7 +31,7 @@ class CalculatorDisplay extends StatelessWidget {
                     icon: const Icon(Icons.more_vert, color: AppColors.activeText),
                     iconSize: AppLayout.headerIconSize,
                     padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                    constraints: const BoxConstraints.tightFor(width: 48, height: 48),
                     onPressed: () {},
                   ),
                 ],
@@ -51,23 +50,13 @@ class CalculatorDisplay extends StatelessWidget {
                         children: [
                           Text(
                             e.expression,
-                            style: TextStyle(
-                              color: tone,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w400,
-                              height: 1.25,
-                            ),
+                            style: AppTypography.displayHistoryExpression(tone),
                             textAlign: TextAlign.right,
                           ),
                           const SizedBox(height: 4),
                           Text(
                             e.result,
-                            style: TextStyle(
-                              color: tone,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              height: 1.1,
-                            ),
+                            style: AppTypography.displayHistoryResult(tone),
                             textAlign: TextAlign.right,
                           ),
                         ],
@@ -81,12 +70,7 @@ class CalculatorDisplay extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
                     controller.secondaryLine,
-                    style: const TextStyle(
-                      color: AppColors.historyGreyNewest,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 1.2,
-                    ),
+                    style: AppTypography.displaySecondary(AppColors.historyGreyNewest),
                     textAlign: TextAlign.right,
                   ),
                 ),
@@ -100,8 +84,7 @@ class CalculatorDisplay extends StatelessWidget {
                 child: DotMatrixOperation(symbol: controller.dotMatrixOperationSymbol),
               ),
             ],
-          ),
-        );
+          );
       },
     );
   }

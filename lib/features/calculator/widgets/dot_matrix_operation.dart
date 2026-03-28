@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_typography.dart';
 
 /// Compact “dot matrix” style hint for the active binary operation after `=`.
 class DotMatrixOperation extends StatelessWidget {
@@ -18,19 +19,11 @@ class DotMatrixOperation extends StatelessWidget {
     }
     return CustomPaint(
       painter: _DotMatrixGridPainter(),
-      foregroundPainter: null,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: EdgeInsets.zero,
         child: Text(
           symbol!,
-          style: const TextStyle(
-            fontFamily: 'Courier',
-            fontWeight: FontWeight.w900,
-            letterSpacing: 4,
-            fontSize: 22,
-            color: AppColors.accentRed,
-            height: 1,
-          ),
+          style: AppTypography.dotMatrixSymbol(AppColors.accentRed),
         ),
       ),
     );

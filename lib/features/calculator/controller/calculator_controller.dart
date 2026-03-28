@@ -103,30 +103,23 @@ class CalculatorController extends ChangeNotifier {
   void inputOperator(String uiOp) {
     _commitFrozenToHistoryIfNeeded();
     if (_afterEquals) {
-      _clearFrozen();
       _afterEquals = false;
+      _clearFrozen();
     }
 
     final ascii = _toAsciiOperator(uiOp);
     final n = _sanitizeNumber(_current);
 
-    if (_chunks.isEmpty) {
+    // If we just finished an operator and haven't started a new operand yet ('0'),
+    // we allow replacing the operator.
+    if (_chunks.isNotEmpty && _isAsciiOperator(_chunks.last) && _current == '0') {
+      _chunks[_chunks.length - 1] = ascii;
+    } else {
+      // Otherwise, commit the current operand and then the operator.
       _chunks.add(n);
       _chunks.add(ascii);
       _current = '0';
-      notifyListeners();
-      return;
     }
-
-    if (_isAsciiOperator(_chunks.last)) {
-      _chunks[_chunks.length - 1] = ascii;
-      notifyListeners();
-      return;
-    }
-
-    _chunks.add(n);
-    _chunks.add(ascii);
-    _current = '0';
     notifyListeners();
   }
 

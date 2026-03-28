@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'features/calculator/calculator_screen.dart';
 import 'features/calculator/controller/calculator_controller.dart';
@@ -38,6 +39,10 @@ class _NothingCalculatorAppState extends State<NothingCalculatorApp> {
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF000000),
         useMaterial3: true,
+        textTheme: GoogleFonts.spaceMonoTextTheme(
+          ThemeData(brightness: Brightness.dark).textTheme,
+        ),
+        iconTheme: const IconThemeData(size: 26, color: Color(0xFFFFFFFF)),
       ),
       home: CalculatorScreen(controller: _controller),
     );
