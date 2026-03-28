@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Nothing-Calculator
 Nothing design inspired calculator application.
 =======
@@ -67,8 +66,3 @@ flutter test
 - `lib/core/theme/` — Colors and layout tokens  
 - `lib/glyph/` — Glyph feedback abstraction  
 - `assets/fonts/` — Drop custom `.ttf` files here and declare them in `pubspec.yaml` if you add a bespoke typeface  
-
-## License
-
-Add a license file when you publish this repository if you intend to share it publicly.
->>>>>>> 336113a (Initial commit: Nothing Calculator (Calci-App) Flutter app)
