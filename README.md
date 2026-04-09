@@ -1,9 +1,5 @@
-# Nothing-Calculator
 Nothing design inspired calculator application.
 =======
-# Nothing Calculator
-
-**Nothing Calculator** (internal design name: **Calci-App**) is a dark-themed calculator built with Flutter. It matches a minimalist Nothing-style UI: pure black background, white numerals, and red accents for operators and the primary **equals** key.
 
 ## What it does
 
