@@ -125,6 +125,30 @@ class CalculatorController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void inputBracket(String bracket) {
+    if (!_scientificMode) return;
+    _commitFrozenToHistoryIfNeeded();
+    if (_afterEquals) {
+      _afterEquals = false;
+      _clearFrozen();
+      _current = '0';
+      _chunks.clear();
+    }
+    
+    // Always commit the current operand if it was modified.
+    if (_current != '0' || (_chunks.isEmpty && bracket == '(')) {
+       // if it's not starting fresh, or if starting with '(', just append.
+       // actually, just commit the current number properly.
+       if (_current != '0') {
+           _chunks.add(_sanitizeNumber(_current));
+           _current = '0';
+       }
+    }
+    
+    _chunks.add(bracket);
+    notifyListeners();
+  }
+
   Future<void> equals() async {
     final full = _evalString();
     if (full.isEmpty) return;

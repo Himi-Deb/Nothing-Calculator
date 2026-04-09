@@ -12,6 +12,7 @@ class NothingButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     this.label,
+    this.caption,
     this.icon,
     this.foregroundColor,
     this.backgroundColor,
@@ -21,6 +22,7 @@ class NothingButton extends StatelessWidget {
 
   final NothingTap? onPressed;
   final String? label;
+  final String? caption;
   final IconData? icon;
   final Color? foregroundColor;
   final Color? backgroundColor;
@@ -30,6 +32,8 @@ class NothingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fg = foregroundColor ?? AppColors.activeText;
+    final effectiveFontSize = caption != null ? 18.0 : fontSize;
+
     final child = icon != null
         ? _FlaskOrIcon(
             icon: icon!,
@@ -40,9 +44,24 @@ class NothingButton extends StatelessWidget {
         : Text(
             label!,
             style: AppTypography.keyLabel(label!, fg).copyWith(
-              fontSize: fontSize,
+              fontSize: effectiveFontSize,
             ),
           );
+
+    Widget content = child;
+    if (caption != null) {
+      content = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          child,
+          const SizedBox(height: 4),
+          Text(
+            caption!,
+            style: AppTypography.scientificCaption(AppColors.historyGreyOldest),
+          ),
+        ],
+      );
+    }
 
     return Material(
       color: backgroundColor ?? Colors.transparent,
@@ -59,7 +78,7 @@ class NothingButton extends StatelessWidget {
         splashColor: AppColors.accentRed.withValues(alpha: 0.12),
         highlightColor: Colors.white10,
         child: Center(
-          child: child,
+          child: content,
         ),
       ),
     );

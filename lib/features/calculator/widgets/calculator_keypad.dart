@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_layout.dart';
@@ -26,14 +27,29 @@ class CalculatorKeypad extends StatelessWidget {
         ];
         return Padding(
           padding: const EdgeInsets.all(AppLayout.keypadEdgeInset),
-          child: Column(
-            children: [
-              for (var i = 0; i < rows.length; i++) ...[
-                Expanded(child: rows[i]),
-                if (i != rows.length - 1 && AppLayout.keyGap > 0)
-                  SizedBox(height: AppLayout.keyGap),
-              ],
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final h = constraints.maxHeight;
+              final rowCount = sci ? 7 : 5;
+              // Add a tiny bit of extra gap safely, or divide cleanly.
+              final rowHeight = h / rowCount;
+              
+              return SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < rows.length; i++) ...[
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOutCubic,
+                        height: rowHeight,
+                        child: rows[i],
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            },
           ),
         );
       },
@@ -45,113 +61,77 @@ class CalculatorKeypad extends StatelessWidget {
       _keypadRow(
         flexes: const [1, 1, 1, 1, 1],
         children: [
-          _sciLabel(
-            child: NothingButton(
-              label: 'INV',
-              foregroundColor: AppColors.activeText,
-              onPressed: controller.applyInverse,
-            ),
+          NothingButton(
+            label: 'INV',
             caption: '1/x',
+            foregroundColor: AppColors.activeText,
+            onPressed: controller.applyInverse,
           ),
-          _sciLabel(
-            child: NothingButton(
-              label: 'SIN',
-              foregroundColor: AppColors.activeText,
-              onPressed: () => controller.applyUnaryScientific('sin'),
-            ),
+          NothingButton(
+            label: 'SIN',
             caption: 'sin',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.applyUnaryScientific('sin'),
           ),
-          _sciLabel(
-            child: NothingButton(
-              label: 'COS',
-              foregroundColor: AppColors.activeText,
-              onPressed: () => controller.applyUnaryScientific('cos'),
-            ),
+          NothingButton(
+            label: 'COS',
             caption: 'cos',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.applyUnaryScientific('cos'),
           ),
-          _sciLabel(
-            child: NothingButton(
-              label: 'TAN',
-              foregroundColor: AppColors.activeText,
-              onPressed: () => controller.applyUnaryScientific('tan'),
-            ),
+          NothingButton(
+            label: 'TAN',
             caption: 'tan',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.applyUnaryScientific('tan'),
           ),
-          _sciLabel(
-            child: NothingButton(
-              label: '^',
-              foregroundColor: AppColors.activeText,
-              onPressed: () => controller.insertScientificOperator('^'),
-            ),
+          NothingButton(
+            label: '^',
             caption: 'pow',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.insertScientificOperator('^'),
           ),
         ],
-      ),
+      ).animate().fade(duration: 250.ms).slideY(begin: -0.2, end: 0, curve: Curves.easeOutCubic),
       _keypadRow(
         flexes: const [1, 1, 1, 1, 1],
         children: [
-          _sciLabel(
-            child: NothingButton(
-              label: 'LN',
-              foregroundColor: AppColors.activeText,
-              onPressed: () => controller.applyUnaryScientific('ln'),
-            ),
+          NothingButton(
+            label: 'LN',
             caption: 'ln',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.applyUnaryScientific('ln'),
           ),
-          _sciLabel(
-            child: NothingButton(
-              label: 'LOG',
-              foregroundColor: AppColors.activeText,
-              onPressed: () => controller.applyUnaryScientific('log'),
-            ),
+          NothingButton(
+            label: 'LOG',
             caption: 'log',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.applyUnaryScientific('log'),
           ),
-          _sciLabel(
-            child: NothingButton(
-              label: '√',
-              foregroundColor: AppColors.activeText,
-              onPressed: () => controller.applyUnaryScientific('sqrt'),
-            ),
+          NothingButton(
+            label: '√',
             caption: 'sqrt',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.applyUnaryScientific('sqrt'),
           ),
-          _sciLabel(
-            child: NothingButton(
-              label: '(',
-              foregroundColor: AppColors.activeText,
-              onPressed: null,
-            ),
+          NothingButton(
+            label: '(',
             caption: 'left',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.inputBracket('('),
           ),
-          _sciLabel(
-            child: NothingButton(
-              label: ')',
-              foregroundColor: AppColors.activeText,
-              onPressed: null,
-            ),
+          NothingButton(
+            label: ')',
             caption: 'right',
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.inputBracket(')'),
           ),
         ],
-      ),
+      ).animate().fade(duration: 300.ms).slideY(begin: -0.2, end: 0, curve: Curves.easeOutCubic),
     ];
   }
 
-  Widget _sciLabel({required Widget child, required String caption}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(child: Center(child: child)),
-        const SizedBox(height: 2),
-        SizedBox(
-          height: 18,
-          child: Text(
-            caption,
-            style: AppTypography.scientificCaption(AppColors.historyGreyOldest),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ],
-    );
-  }
+
 
   List<Widget> _basicRows() {
     return [

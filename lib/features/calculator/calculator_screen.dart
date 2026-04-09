@@ -22,24 +22,35 @@ class CalculatorScreen extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final h = constraints.maxHeight;
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(
-                    height: h * AppLayout.displayFraction,
-                    child: CalculatorDisplay(controller: controller),
+            return ListenableBuilder(
+              listenable: controller,
+              builder: (context, _) {
+                final targetHeight = h *
+                    (controller.scientificMode
+                        ? AppLayout.scientificDisplayFraction
+                        : AppLayout.displayFraction);
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOutCubic,
+                        height: targetHeight,
+                        child: CalculatorDisplay(controller: controller),
+                      ),
+                      Container(
+                        height: 1,
+                        color: AppColors.divider,
+                      ),
+                      Expanded(
+                        child: CalculatorKeypad(controller: controller),
+                      ),
+                    ],
                   ),
-                  Container(
-                    height: 1,
-                    color: AppColors.divider,
-                  ),
-                  Expanded(
-                    child: CalculatorKeypad(controller: controller),
-                  ),
-                ],
-              ),
+                );
+              },
             );
           },
         ),
