@@ -17,6 +17,7 @@ class NothingButton extends StatelessWidget {
     this.foregroundColor,
     this.backgroundColor,
     this.fontSize,
+    this.scale,
     this.showFlaskDot = false,
   }) : assert(label != null || icon != null, 'Provide label or icon');
 
@@ -27,6 +28,7 @@ class NothingButton extends StatelessWidget {
   final Color? foregroundColor;
   final Color? backgroundColor;
   final double? fontSize;
+  final double? scale;
   final bool showFlaskDot;
 
   @override
@@ -49,11 +51,18 @@ class NothingButton extends StatelessWidget {
           );
 
     Widget content = child;
+    if (scale != null) {
+      content = Transform.scale(
+        scale: scale!,
+        child: content,
+      );
+    }
+
     if (caption != null) {
       content = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          child,
+          content,
           const SizedBox(height: 4),
           Text(
             caption!,

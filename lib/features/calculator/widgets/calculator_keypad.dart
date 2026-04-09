@@ -88,11 +88,12 @@ class CalculatorKeypad extends StatelessWidget {
           NothingButton(
             label: '^',
             caption: 'pow',
+            scale: 1.25,
             foregroundColor: AppColors.activeText,
             onPressed: () => controller.insertScientificOperator('^'),
           ),
         ],
-      ).animate().fade(duration: 250.ms).slideY(begin: -0.2, end: 0, curve: Curves.easeOutCubic),
+      ).animate().fade(duration: 250.ms, curve: Curves.easeIn),
       _keypadRow(
         flexes: const [1, 1, 1, 1, 1],
         children: [
@@ -127,7 +128,7 @@ class CalculatorKeypad extends StatelessWidget {
             onPressed: () => controller.inputBracket(')'),
           ),
         ],
-      ).animate().fade(duration: 300.ms).slideY(begin: -0.2, end: 0, curve: Curves.easeOutCubic),
+      ).animate().fade(duration: 300.ms, curve: Curves.easeIn),
     ];
   }
 

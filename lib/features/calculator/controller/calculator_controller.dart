@@ -135,14 +135,25 @@ class CalculatorController extends ChangeNotifier {
       _chunks.clear();
     }
     
-    // Always commit the current operand if it was modified.
-    if (_current != '0' || (_chunks.isEmpty && bracket == '(')) {
-       // if it's not starting fresh, or if starting with '(', just append.
-       // actually, just commit the current number properly.
-       if (_current != '0') {
-           _chunks.add(_sanitizeNumber(_current));
-           _current = '0';
-       }
+    bool justCommittedNumber = false;
+
+    // Focus active typing buffer to memory string
+    if (_current != '0') {
+      _chunks.add(_sanitizeNumber(_current));
+      _current = '0';
+      justCommittedNumber = true;
+    }
+
+    // Auto-insert multiplication notation when syntax mathematically demands it, e.g. '2(' or ')( '
+    if (bracket == '(') {
+      if (justCommittedNumber) {
+        _chunks.add('×');
+      } else if (_chunks.isNotEmpty) {
+        final last = _chunks.last;
+        if (last == ')' || double.tryParse(last) != null) {
+          _chunks.add('×');
+        }
+      }
     }
     
     _chunks.add(bracket);
