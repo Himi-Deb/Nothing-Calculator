@@ -110,18 +110,25 @@ class CalculatorController extends ChangeNotifier {
     }
 
     final ascii = _toAsciiOperator(uiOp);
-    final n = _sanitizeNumber(_current);
 
-    // If we just finished an operator and haven't started a new operand yet ('0'),
-    // we allow replacing the operator.
-    if (_chunks.isNotEmpty && _isAsciiOperator(_chunks.last) && _current == '0') {
-      _chunks[_chunks.length - 1] = ascii;
-    } else {
-      // Otherwise, commit the current operand and then the operator.
-      _chunks.add(n);
-      _chunks.add(ascii);
-      _current = '0';
+    if (_chunks.isNotEmpty && _current == '0') {
+      final last = _chunks.last;
+      if (_isAsciiOperator(last)) {
+        _chunks[_chunks.length - 1] = ascii;
+        notifyListeners();
+        return;
+      }
+      if (last == ')') {
+        _chunks.add(ascii);
+        notifyListeners();
+        return;
+      }
     }
+
+    final n = _sanitizeNumber(_current);
+    _chunks.add(n);
+    _chunks.add(ascii);
+    _current = '0';
     notifyListeners();
   }
 
@@ -302,7 +309,11 @@ class CalculatorController extends ChangeNotifier {
     for (final c in _chunks) {
       b.write(c);
     }
-    b.write(_sanitizeNumber(_current));
+    if (_chunks.isNotEmpty && _chunks.last == ')' && _current == '0') {
+      // Avoid appending floating zero after a closed bracket bracket.
+    } else {
+      b.write(_sanitizeNumber(_current));
+    }
     return b.toString();
   }
 
@@ -311,13 +322,15 @@ class CalculatorController extends ChangeNotifier {
       return '';
     }
     final b = StringBuffer();
-    for (var i = 0; i < _chunks.length; i++) {
-      if (i.isEven) {
-        b.write(DisplayFormat.formatOperand(_chunks[i]));
+    for (var c in _chunks) {
+      if (_isAsciiOperator(c)) {
+        b.write(' ');
+        b.write(_uiOperator(c));
+        b.write(' ');
+      } else if (c == '(' || c == ')') {
+        b.write(c);
       } else {
-        b.write(' ');
-        b.write(_uiOperator(_chunks[i]));
-        b.write(' ');
+        b.write(DisplayFormat.formatOperand(c));
       }
     }
     // Only show current if it was edited or if it's the last part.
