@@ -41,15 +41,17 @@ class CalculatorController extends ChangeNotifier {
     if (_afterEquals && _frozenExpression != null) {
       return _frozenExpression!;
     }
-    return _prettyInfixExpression();
+    // We don't show secondaryLine while inputting anymore (moved to primaryLine).
+    return '';
   }
 
-  /// White line: operand or final result.
+  /// White line: full expression during input, or final result.
   String get primaryLine {
     if (_afterEquals && _frozenResult != null) {
       return _frozenResult!;
     }
-    return DisplayFormat.formatOperand(_current);
+    final exp = _prettyInfixExpression();
+    return exp.isEmpty ? DisplayFormat.formatOperand(_current) : exp;
   }
 
   void inputDigit(String d) {
@@ -283,7 +285,10 @@ class CalculatorController extends ChangeNotifier {
         b.write(' ');
       }
     }
-    b.write(DisplayFormat.formatOperand(_current));
+    // Only show current if it was edited or if it's the last part.
+    if (_current != '0' || _chunks.isEmpty) {
+      b.write(DisplayFormat.formatOperand(_current));
+    }
     return b.toString().trim();
   }
 

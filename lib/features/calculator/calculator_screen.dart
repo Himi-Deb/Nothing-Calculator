@@ -22,21 +22,24 @@ class CalculatorScreen extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final h = constraints.maxHeight;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: h * AppLayout.displayFraction,
-                  child: CalculatorDisplay(controller: controller),
-                ),
-                Container(
-                  height: 1,
-                  color: AppColors.divider,
-                ),
-                Expanded(
-                  child: CalculatorKeypad(controller: controller),
-                ),
-              ],
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: h * AppLayout.displayFraction,
+                    child: CalculatorDisplay(controller: controller),
+                  ),
+                  Container(
+                    height: 1,
+                    color: AppColors.divider,
+                  ),
+                  Expanded(
+                    child: CalculatorKeypad(controller: controller),
+                  ),
+                ],
+              ),
             );
           },
         ),

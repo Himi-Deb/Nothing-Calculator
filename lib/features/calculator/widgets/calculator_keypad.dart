@@ -161,6 +161,7 @@ class CalculatorKeypad extends StatelessWidget {
           NothingButton(
             label: 'AC',
             foregroundColor: AppColors.accentRed,
+            fontSize: AppTypography.keyCapSize - 2,
             onPressed: controller.clearAll,
           ),
           NothingButton(
@@ -206,6 +207,7 @@ class CalculatorKeypad extends StatelessWidget {
             label: '=',
             foregroundColor: AppColors.activeText,
             backgroundColor: AppColors.accentRed,
+            fontSize: AppTypography.keyCapSize * 1.4 * 1.25,
             onPressed: controller.equals,
           ),
         ],

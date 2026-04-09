@@ -15,6 +15,7 @@ class NothingButton extends StatelessWidget {
     this.icon,
     this.foregroundColor,
     this.backgroundColor,
+    this.fontSize,
     this.showFlaskDot = false,
   }) : assert(label != null || icon != null, 'Provide label or icon');
 
@@ -23,6 +24,7 @@ class NothingButton extends StatelessWidget {
   final IconData? icon;
   final Color? foregroundColor;
   final Color? backgroundColor;
+  final double? fontSize;
   final bool showFlaskDot;
 
   @override
@@ -37,13 +39,17 @@ class NothingButton extends StatelessWidget {
           )
         : Text(
             label!,
-            style: AppTypography.keyLabel(label!, fg),
+            style: AppTypography.keyLabel(label!, fg).copyWith(
+              fontSize: fontSize,
+            ),
           );
 
     return Material(
       color: backgroundColor ?? Colors.transparent,
-      clipBehavior: Clip.hardEdge,
+      borderRadius: BorderRadius.circular(8),
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
+        borderRadius: BorderRadius.circular(8),
         onTap: onPressed == null
             ? null
             : () {

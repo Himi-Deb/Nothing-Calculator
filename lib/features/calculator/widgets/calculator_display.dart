@@ -39,12 +39,15 @@ class CalculatorDisplay extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
+                  reverse: true,
                   itemCount: history.length,
                   itemBuilder: (context, index) {
-                    final e = history[index];
-                    final tone = _historyTone(index, history.length);
+                    // index 0 is the bottom-most item in the reversed list.
+                    // We want the newest history entry (history.last) to be at the bottom.
+                    final e = history[history.length - 1 - index];
+                    final tone = _historyTone(history.length - 1 - index, history.length);
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -78,11 +81,7 @@ class CalculatorDisplay extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: PrimaryResultText(text: controller.primaryLine),
               ),
-              const SizedBox(height: 6),
-              Align(
-                alignment: Alignment.centerRight,
-                child: DotMatrixOperation(symbol: controller.dotMatrixOperationSymbol),
-              ),
+              const SizedBox(height: 32),
             ],
           );
       },

@@ -23,10 +23,11 @@ class PrimaryResultText extends StatelessWidget {
       return Text(text, style: base, textAlign: TextAlign.right);
     }
 
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(text: parts[0], style: base),
+    final children = <TextSpan>[];
+    for (var i = 0; i < parts.length; i++) {
+      children.add(TextSpan(text: parts[i], style: base));
+      if (i < parts.length - 1) {
+        children.add(
           TextSpan(
             text: '●',
             style: base.copyWith(
@@ -34,12 +35,12 @@ class PrimaryResultText extends StatelessWidget {
               fontSize: fontSize * 0.23,
             ),
           ),
-          TextSpan(
-            text: parts.sublist(1).join('.'),
-            style: base,
-          ),
-        ],
-      ),
+        );
+      }
+    }
+
+    return Text.rich(
+      TextSpan(children: children),
       textAlign: TextAlign.right,
     );
   }
