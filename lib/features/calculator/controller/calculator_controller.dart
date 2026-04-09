@@ -62,6 +62,7 @@ class CalculatorController extends ChangeNotifier {
       _chunks.clear();
       _afterEquals = false;
     }
+    if (_current.length >= 15) return;
     if (_current == '0' && d != '0') {
       _current = d;
     } else if (_current == '-0') {
@@ -142,27 +143,12 @@ class CalculatorController extends ChangeNotifier {
       _chunks.clear();
     }
     
-    bool justCommittedNumber = false;
-
     // Focus active typing buffer to memory string
     if (_current != '0') {
       _chunks.add(_sanitizeNumber(_current));
       _current = '0';
-      justCommittedNumber = true;
     }
 
-    // Auto-insert multiplication notation when syntax mathematically demands it, e.g. '2(' or ')( '
-    if (bracket == '(') {
-      if (justCommittedNumber) {
-        _chunks.add('×');
-      } else if (_chunks.isNotEmpty) {
-        final last = _chunks.last;
-        if (last == ')' || double.tryParse(last) != null) {
-          _chunks.add('×');
-        }
-      }
-    }
-    
     _chunks.add(bracket);
     notifyListeners();
   }

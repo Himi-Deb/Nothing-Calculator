@@ -25,10 +25,13 @@ abstract final class ExpressionEvaluator {
     return double.tryParse(raw.toString()) ?? double.nan;
   }
 
-  /// Maps UI symbols to parser tokens and strips display-only characters.
   static String normalizeForParser(String input) {
     var s = input.replaceAll('×', '*').replaceAll('÷', '/').replaceAll(',', '');
     s = s.replaceAll('−', '-');
+    
+    // Auto-inject missing multiplication bounds for parsed mathematical brackets (e.g. '2(' => '2*(')
+    s = s.replaceAllMapped(RegExp(r'(\d|\))\s*\('), (m) => '${m[1]}*(');
+    
     s = s.trim();
     return s;
   }
