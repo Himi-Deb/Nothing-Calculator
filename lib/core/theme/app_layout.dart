@@ -6,4 +6,6 @@ abstract final class AppLayout {
   static const double keypadEdgeInset = 0;
   static const double keyGap = 0;
   static const double headerIconSize = 26;
+  /// Fixed height per scientific row so AnimatedSize can expand cleanly.
+  static const double scientificRowHeight = 64;
 }

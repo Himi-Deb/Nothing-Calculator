@@ -30,13 +30,13 @@ class CalculatorScreen extends StatelessWidget {
                         ? AppLayout.scientificDisplayFraction
                         : AppLayout.displayFraction);
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(0.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeOutCubic,
+                        duration: const Duration(milliseconds: 320),
+                        curve: Curves.easeOutQuart,
                         height: targetHeight,
                         child: CalculatorDisplay(controller: controller),
                       ),

@@ -62,19 +62,19 @@ class NothingButton extends StatelessWidget {
       content = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          content,
-          const SizedBox(height: 4),
           Text(
             caption!,
-            style: AppTypography.scientificCaption(AppColors.historyGreyOldest),
+            style: AppTypography.scientificCaption(const Color(0xFF787776)),
           ),
+          const SizedBox(height: 4),
+          content,
         ],
       );
     }
 
     return Material(
       color: backgroundColor ?? Colors.transparent,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(0),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),

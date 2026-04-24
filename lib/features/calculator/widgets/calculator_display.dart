@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_layout.dart';
 import '../../../core/theme/app_typography.dart';
 import '../controller/calculator_controller.dart';
-import 'dot_matrix_operation.dart';
 import 'primary_result_text.dart';
 
 class CalculatorDisplay extends StatelessWidget {
@@ -24,18 +22,7 @@ class CalculatorDisplay extends StatelessWidget {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.more_vert, color: AppColors.activeText),
-                    iconSize: AppLayout.headerIconSize,
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints.tightFor(width: 48, height: 48),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
+
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.zero,

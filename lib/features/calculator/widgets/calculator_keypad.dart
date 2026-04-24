@@ -21,40 +21,39 @@ class CalculatorKeypad extends StatelessWidget {
       listenable: controller,
       builder: (context, _) {
         final sci = controller.scientificMode;
-        final rows = <Widget>[
-          if (sci) ..._scientificRows(),
-          ..._basicRows(),
-        ];
         return Padding(
           padding: const EdgeInsets.all(AppLayout.keypadEdgeInset),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final h = constraints.maxHeight;
-              final rowCount = sci ? 7 : 5;
-              // Add a tiny bit of extra gap safely, or divide cleanly.
-              final rowHeight = h / rowCount;
-              
-              return SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AnimatedSize(
+                duration: const Duration(milliseconds: 320),
+                curve: Curves.easeOutQuart,
+                alignment: Alignment.topCenter,
+                child: sci
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: _scientificRows()
+                            .map((row) => SizedBox(height: AppLayout.scientificRowHeight, child: row))
+                            .toList(),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              Expanded(
                 child: Column(
-                  children: [
-                    for (var i = 0; i < rows.length; i++) ...[
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeOutCubic,
-                        height: rowHeight,
-                        child: rows[i],
-                      ),
-                    ],
-                  ],
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: _basicRows()
+                      .map((row) => Expanded(child: row))
+                      .toList(),
                 ),
-              );
-            },
+              ),
+            ],
           ),
         );
       },
     );
   }
+
 
   List<Widget> _scientificRows() {
     return [
