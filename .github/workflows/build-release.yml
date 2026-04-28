@@ -55,15 +55,19 @@ jobs:
           echo "=== Keystore file ==="
           ls -lh android/app/upload-keystore.jks
 
-      - name: Build App Bundle
-        working-directory: android
+      # Create Flutter's expected build/app symlink — Flutter checks here for the .aab after building
+      - name: Setup Flutter build symlink
         run: |
-          chmod +x gradlew
-          ./gradlew bundleRelease
+          mkdir -p build
+          ln -sfn "$(pwd)/android/app/build" "$(pwd)/build/app"
+
+      - name: Build App Bundle
+        run: flutter build appbundle --release
 
       - name: Locate built .aab
         if: always()
-        run: find android/app/build -name "*.aab" 2>/dev/null || echo "No .aab found"
+        run: |
+          find . -name "*.aab" 2>/dev/null || echo "No .aab found anywhere"
 
       - name: Upload App Bundle artifact
         uses: actions/upload-artifact@v4
