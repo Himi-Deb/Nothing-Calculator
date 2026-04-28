@@ -37,7 +37,7 @@ jobs:
       # Decode keystore into android/app/ so Gradle can find it via relative path
       - name: Decode keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d ' \n\r' | base64 --decode > android/app/upload-keystore.jks
 
       # key.properties goes in android/ (root Android project dir) — matches build.gradle.kts
       - name: Create key.properties
