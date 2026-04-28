@@ -1,3 +1,7 @@
+import java.io.File
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -6,9 +10,9 @@ plugins {
 
 // Load signing credentials from key.properties (never committed to git)
 val keyPropertiesFile = rootProject.file("key.properties")
-val keyProperties = java.util.Properties()
+val keyProperties = Properties()
 if (keyPropertiesFile.exists()) {
-    keyProperties.load(java.io.FileInputStream(keyPropertiesFile))
+    keyProperties.load(FileInputStream(keyPropertiesFile))
 }
 
 android {
@@ -30,7 +34,7 @@ android {
             keyAlias = keyProperties["keyAlias"] as String
             keyPassword = keyProperties["keyPassword"] as String
             val storeFilePath = keyProperties["storeFile"] as String
-            storeFile = if (java.io.File(storeFilePath).isAbsolute) {
+            storeFile = if (File(storeFilePath).isAbsolute) {
                 file(storeFilePath)
             } else {
                 file("$projectDir/$storeFilePath")
