@@ -1,0 +1,74 @@
+# Privacy Policy
+
+**Application:** Nothing Calculator  
+**Platform:** Android (Google Play Store)  
+**Last updated:** April 28, 2025
+
+---
+
+## Overview
+
+Not Dot Calculator is a fully offline calculator application for Android which I created to go better with the NothingOS design language. 
+It does not collect, store, transmit, or share any personal data or usage information of any kind.
+
+---
+
+## Data Collection
+
+**We collect no data. None.**
+
+Nothing Calculator does not collect:
+
+- Personal information (name, email, phone number, or any identifier)
+- Device information (model, OS version, hardware identifiers)
+- Location data
+- Usage or analytics data
+- Crash reports or diagnostic logs
+- Financial or payment information
+- Contacts, camera, microphone, or any other sensitive data
+
+---
+
+## Internet Access
+
+Nothing Calculator does not require an internet connection and does not make any network requests. No data is sent to any server at any time.
+
+---
+
+## Permissions
+
+Nothing Calculator requests no Android permissions. It does not access the internet, storage, contacts, location, camera, microphone, or any other device capability.
+
+---
+
+## Third-Party Services
+
+Nothing Calculator does not integrate any third-party SDKs, analytics services, advertising networks, or crash reporting tools.
+
+---
+
+## Data Storage
+
+All calculation history (if any) is stored exclusively on your device using local storage. This data never leaves your device and is deleted when you uninstall the application.
+
+---
+
+## Children's Privacy
+
+Nothing Calculator does not collect data from any user, including children under the age of 13. It is compliant with the Children's Online Privacy Protection Act (COPPA) and Google Play's Families Policy by virtue of collecting no data whatsoever.
+
+---
+
+## Changes to This Policy
+
+If the data practices of this application change in a future version, this policy will be updated prior to that version's release on the Google Play Store. The "Last updated" date at the top of this document will reflect any changes.
+
+---
+
+## Contact
+
+If you have any questions about this privacy policy, you can open an issue on the GitHub repository.
+
+---
+
+*This application is not affiliated with Nothing Technology Limited. "Nothing OS" and the Nothing design language are trademarks of Nothing Technology Limited.*
