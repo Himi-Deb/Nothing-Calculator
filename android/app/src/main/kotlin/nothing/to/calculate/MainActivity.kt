@@ -1,4 +1,4 @@
-package com.nothing.nothing_calculator
+package nothing.to.calculate
 
 import io.flutter.embedding.android.FlutterActivity
 
