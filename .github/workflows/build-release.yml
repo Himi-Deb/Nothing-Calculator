@@ -47,8 +47,16 @@ jobs:
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "storeFile=upload-keystore.jks" >> android/key.properties
 
+      # Verify signing assets are in place before building
+      - name: Verify signing setup
+        run: |
+          echo "=== key.properties (values masked) ==="
+          cat android/key.properties | sed 's/=.*/=***/'
+          echo "=== Keystore file ==="
+          ls -lh android/app/upload-keystore.jks
+
       - name: Build App Bundle
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --verbose
 
       - name: Upload App Bundle artifact
         uses: actions/upload-artifact@v4
