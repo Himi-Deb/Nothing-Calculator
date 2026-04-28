@@ -29,7 +29,12 @@ android {
         create("release") {
             keyAlias = keyProperties["keyAlias"] as String
             keyPassword = keyProperties["keyPassword"] as String
-            storeFile = file(keyProperties["storeFile"] as String)
+            val storeFilePath = keyProperties["storeFile"] as String
+            storeFile = if (java.io.File(storeFilePath).isAbsolute) {
+                file(storeFilePath)
+            } else {
+                file("$projectDir/$storeFilePath")
+            }
             storePassword = keyProperties["storePassword"] as String
         }
     }
