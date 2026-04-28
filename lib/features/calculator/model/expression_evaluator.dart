@@ -32,6 +32,17 @@ abstract final class ExpressionEvaluator {
     // Auto-inject missing multiplication bounds for parsed mathematical brackets (e.g. '2(' => '2*(')
     s = s.replaceAllMapped(RegExp(r'(\d|\))\s*\('), (m) => '${m[1]}*(');
     
+    // math_expressions uses natural log by default for log(), we want base 10 for "log"
+    s = s.replaceAll('log(', 'log(10,');
+    
+    // Auto-close missing right brackets
+    int openCount = s.split('(').length - 1;
+    int closeCount = s.split(')').length - 1;
+    while (openCount > closeCount) {
+      s += ')';
+      closeCount++;
+    }
+    
     s = s.trim();
     return s;
   }

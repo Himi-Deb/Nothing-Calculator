@@ -99,7 +99,6 @@ class CalculatorController extends ChangeNotifier {
     final r = 1 / v;
     if (!r.isFinite) return;
     _current = _stripTrailingZeros(r.toString());
-    _chunks.clear();
     notifyListeners();
   }
 
@@ -210,11 +209,29 @@ class CalculatorController extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    if (_current.length > 1) {
-      _current = _current.substring(0, _current.length - 1);
-      if (_current == '-') _current = '0';
-    } else {
-      _current = '0';
+    
+    if (_current != '0') {
+      if (_current.length > 1) {
+        _current = _current.substring(0, _current.length - 1);
+        if (_current == '-') _current = '0';
+      } else {
+        _current = '0';
+      }
+    } else if (_chunks.isNotEmpty) {
+      final last = _chunks.removeLast();
+      if (_isAsciiOperator(last) || last == '(' || last == ')') {
+        if (_chunks.isNotEmpty && !_isAsciiOperator(_chunks.last) && _chunks.last != '(' && _chunks.last != ')' && !_chunks.last.contains('(')) {
+          _current = _chunks.removeLast();
+        }
+      } else if (last.contains('(')) {
+        // e.g. "sin(", "ln(". Just remove it, _current remains '0'.
+      } else {
+        // Number chunk
+        if (last.length > 1) {
+          _current = last.substring(0, last.length - 1);
+          if (_current == '-') _current = '0';
+        }
+      }
     }
     notifyListeners();
   }
@@ -230,38 +247,25 @@ class CalculatorController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Scientific: unary operations on the current operand (degrees for trig).
   void applyUnaryScientific(String id) {
     if (!_scientificMode) return;
     _commitFrozenToHistoryIfNeeded();
     if (_afterEquals) {
       _afterEquals = false;
       _clearFrozen();
-    }
-    final v = double.tryParse(_sanitizeNumber(_current)) ?? 0;
-    late final double r;
-    if (id == 'sin') {
-      r = math.sin(v * math.pi / 180);
-    } else if (id == 'cos') {
-      r = math.cos(v * math.pi / 180);
-    } else if (id == 'tan') {
-      r = math.tan(v * math.pi / 180);
-    } else if (id == 'ln') {
-      r = math.log(v);
-    } else if (id == 'log') {
-      r = math.log(v) / math.ln10;
-    } else if (id == 'sqrt') {
-      r = math.sqrt(v);
-    } else {
-      return;
-    }
-    if (!r.isFinite) {
       _current = '0';
-      notifyListeners();
-      return;
+      _chunks.clear();
     }
-    _current = _stripTrailingZeros(r.toString());
-    _chunks.clear();
+    
+    if (_current != '0') {
+      _chunks.add(_sanitizeNumber(_current));
+      _chunks.add('*');
+      _current = '0';
+    } else if (_chunks.isNotEmpty && _chunks.last == ')') {
+      _chunks.add('*');
+    }
+    
+    _chunks.add('$id(');
     notifyListeners();
   }
 
