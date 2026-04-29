@@ -62,7 +62,7 @@ jobs:
           ln -sfn "$(pwd)/android/app/build" "$(pwd)/build/app"
 
       - name: Build App Bundle
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
 
       - name: Locate built .aab
         if: always()
@@ -74,4 +74,18 @@ jobs:
         with:
           name: nothing-calculator-release-aab
           path: android/app/build/outputs/bundle/release/app-release.aab
+          retention-days: 30
+
+      - name: Zip Debug Symbols and Mapping
+        run: |
+          mkdir -p debug_symbols
+          cp android/app/build/outputs/mapping/release/mapping.txt debug_symbols/ || echo "mapping.txt not found"
+          cp -r build/app/outputs/symbols/* debug_symbols/ || echo "dart symbols not found"
+          cd debug_symbols && zip -r ../debug-symbols-and-mapping.zip .
+
+      - name: Upload Debug Symbols artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nothing-calculator-debug-symbols
+          path: debug-symbols-and-mapping.zip
           retention-days: 30
