@@ -18,8 +18,6 @@ Nothing design inspired calculator application.
 | **math_expressions** | Parse and evaluate arithmetic strings on **=** |
 | **nothing_glyph_interface** | Optional; reserved for future Glyph LED hooks on Android |
 
-Glassmorphism was intentionally **not** used—the UI follows the flat, high-contrast reference screens.
-
 ## Requirements
 
 - [Flutter SDK](https://docs.flutter.dev/get-started/install) (stable channel recommended)
