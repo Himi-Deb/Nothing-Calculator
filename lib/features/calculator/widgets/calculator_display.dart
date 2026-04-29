@@ -19,10 +19,11 @@ class CalculatorDisplay extends StatelessWidget {
       listenable: controller,
       builder: (context, _) {
         final history = controller.history;
-        return Column(
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
@@ -70,7 +71,8 @@ class CalculatorDisplay extends StatelessWidget {
               ),
               const SizedBox(height: 32),
             ],
-          );
+          ),
+        );
       },
     );
   }

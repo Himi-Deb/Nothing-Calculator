@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:math_expressions/math_expressions.dart';
 
 /// Wraps [math_expressions] with UI-friendly normalization and formatting.
@@ -9,7 +10,10 @@ abstract final class ExpressionEvaluator {
     try {
       final parser = Parser();
       final Expression exp = parser.parse(normalized);
-      final dynamic raw = exp.evaluate(EvaluationType.REAL, ContextModel());
+      final ContextModel cm = ContextModel();
+      cm.bindVariable(Variable('pi'), Number(math.pi));
+      cm.bindVariable(Variable('e'), Number(math.e));
+      final dynamic raw = exp.evaluate(EvaluationType.REAL, cm);
       final double value = _toDouble(raw);
       if (!value.isFinite) return null;
       return value;
@@ -34,6 +38,12 @@ abstract final class ExpressionEvaluator {
     
     // math_expressions uses natural log by default for log(), we want base 10 for "log"
     s = s.replaceAll('log(', 'log(10,');
+
+    // math_expressions uses radians for trig functions, we want degrees.
+    // We wrap the argument in (pi/180)*(. The existing bracket auto-closer handles the rest.
+    s = s.replaceAll('sin(', 'sin((pi/180)*(');
+    s = s.replaceAll('cos(', 'cos((pi/180)*(');
+    s = s.replaceAll('tan(', 'tan((pi/180)*(');
     
     // Auto-close missing right brackets
     int openCount = s.split('(').length - 1;
