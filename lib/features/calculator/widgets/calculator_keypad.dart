@@ -57,8 +57,9 @@ class CalculatorKeypad extends StatelessWidget {
 
   List<Widget> _scientificRows() {
     return [
+      // Row 1: INV, SIN, COS, TAN
       _keypadRow(
-        flexes: const [1, 1, 1, 1, 1],
+        flexes: const [1, 1, 1, 1],
         children: [
           NothingButton(
             label: 'INV',
@@ -84,17 +85,11 @@ class CalculatorKeypad extends StatelessWidget {
             foregroundColor: AppColors.activeText,
             onPressed: () => controller.applyUnaryScientific('tan'),
           ),
-          NothingButton(
-            label: '^',
-            caption: 'pow',
-            scale: 1.25,
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.insertScientificOperator('^'),
-          ),
         ],
       ).animate().fade(duration: 250.ms, curve: Curves.easeIn),
+      // Row 2: LN, LOG, √, ^
       _keypadRow(
-        flexes: const [1, 1, 1, 1, 1],
+        flexes: const [1, 1, 1, 1],
         children: [
           NothingButton(
             label: 'LN',
@@ -115,6 +110,19 @@ class CalculatorKeypad extends StatelessWidget {
             onPressed: () => controller.applyUnaryScientific('sqrt'),
           ),
           NothingButton(
+            label: '^',
+            caption: 'pow',
+            scale: 1.25,
+            foregroundColor: AppColors.activeText,
+            onPressed: () => controller.insertScientificOperator('^'),
+          ),
+        ],
+      ).animate().fade(duration: 300.ms, curve: Curves.easeIn),
+      // Row 3: (, ) + two spacers
+      _keypadRow(
+        flexes: const [1, 1, 1, 1],
+        children: [
+          NothingButton(
             label: '(',
             caption: 'left',
             foregroundColor: AppColors.activeText,
@@ -126,8 +134,10 @@ class CalculatorKeypad extends StatelessWidget {
             foregroundColor: AppColors.activeText,
             onPressed: () => controller.inputBracket(')'),
           ),
+          const SizedBox.shrink(),
+          const SizedBox.shrink(),
         ],
-      ).animate().fade(duration: 300.ms, curve: Curves.easeIn),
+      ).animate().fade(duration: 350.ms, curve: Curves.easeIn),
     ];
   }
 
