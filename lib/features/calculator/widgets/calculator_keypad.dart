@@ -25,94 +25,45 @@ class CalculatorKeypad extends StatelessWidget {
       builder: (context, _) {
         final sci = controller.scientificMode;
 
-        return isLandscape
-            ? _buildLandscape(sci)
-            : _buildPortrait(sci);
+        // In landscape the scientific panel is handled by _LandscapeScientificPanel
+        // in calculator_screen.dart — the keypad here always renders basic rows only.
+        if (isLandscape) {
+          return _buildBasicKeypad();
+        }
+
+        // Portrait: scientific rows slide in above the basic keypad.
+        return Padding(
+          padding: const EdgeInsets.all(AppLayout.keypadEdgeInset),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AnimatedSize(
+                duration: const Duration(milliseconds: 320),
+                curve: Curves.easeOutQuart,
+                alignment: Alignment.topCenter,
+                child: sci
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: _scientificRowsPortrait()
+                            .map((row) => SizedBox(
+                                height: AppLayout.scientificRowHeight,
+                                child: row))
+                            .toList(),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              Expanded(child: _buildBasicKeypad()),
+            ],
+          ),
+        );
       },
     );
   }
 
-  // ─────────────────────────────────────────────
-  // PORTRAIT: scientific rows slide in above keypad
-  // ─────────────────────────────────────────────
-  Widget _buildPortrait(bool sci) {
-    return Padding(
-      padding: const EdgeInsets.all(AppLayout.keypadEdgeInset),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          AnimatedSize(
-            duration: const Duration(milliseconds: 320),
-            curve: Curves.easeOutQuart,
-            alignment: Alignment.topCenter,
-            child: sci
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: _scientificRowsPortrait()
-                        .map((row) => SizedBox(
-                            height: AppLayout.scientificRowHeight, child: row))
-                        .toList(),
-                  )
-                : const SizedBox.shrink(),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _basicRows()
-                  .map((row) => Expanded(child: row))
-                  .toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─────────────────────────────────────────────
-  // LANDSCAPE: scientific panel slides in from the left
-  // ─────────────────────────────────────────────
-  Widget _buildLandscape(bool sci) {
-    return Padding(
-      padding: const EdgeInsets.all(AppLayout.keypadEdgeInset),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Scientific panel: AnimatedSize collapses width when hidden
-          AnimatedSize(
-            duration: const Duration(milliseconds: 320),
-            curve: Curves.easeOutQuart,
-            alignment: Alignment.centerLeft,
-            child: sci
-                ? Row(
-                    children: [
-                      SizedBox(
-                        width: AppLayout.landscapeScientificPanelWidth,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: _scientificColumnsLandscape()
-                              .map((row) => Expanded(child: row))
-                              .toList(),
-                        ),
-                      ),
-                      Container(
-                        width: 1,
-                        color: AppColors.divider,
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-          ),
-          // Basic keypad always takes remaining width
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _basicRows()
-                  .map((row) => Expanded(child: row))
-                  .toList(),
-            ),
-          ),
-        ],
-      ),
+  Widget _buildBasicKeypad() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: _basicRows().map((row) => Expanded(child: row)).toList(),
     );
   }
 
@@ -192,106 +143,6 @@ class CalculatorKeypad extends StatelessWidget {
           ),
         ],
       ).animate().fade(duration: 300.ms, curve: Curves.easeIn),
-    ];
-  }
-
-  // ─────────────────────────────────────────────
-  // LANDSCAPE scientific panel: 5 rows × 2 columns
-  // Aligns row-for-row with the 5 basic keypad rows
-  // ─────────────────────────────────────────────
-  List<Widget> _scientificColumnsLandscape() {
-    return [
-      // Row 1 (aligns with AC/% row)
-      _keypadRow(
-        flexes: const [1, 1],
-        children: [
-          NothingButton(
-            label: 'INV',
-            caption: '1/x',
-            foregroundColor: AppColors.activeText,
-            onPressed: controller.applyInverse,
-          ),
-          NothingButton(
-            label: '^',
-            caption: 'pow',
-            scale: 1.25,
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.insertScientificOperator('^'),
-          ),
-        ],
-      ).animate().fade(duration: 250.ms, curve: Curves.easeIn),
-      // Row 2 (aligns with 7/8/9 row)
-      _keypadRow(
-        flexes: const [1, 1],
-        children: [
-          NothingButton(
-            label: 'SIN',
-            caption: 'sin',
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.applyUnaryScientific('sin'),
-          ),
-          NothingButton(
-            label: 'LN',
-            caption: 'ln',
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.applyUnaryScientific('ln'),
-          ),
-        ],
-      ).animate().fade(duration: 270.ms, curve: Curves.easeIn),
-      // Row 3 (aligns with 4/5/6 row)
-      _keypadRow(
-        flexes: const [1, 1],
-        children: [
-          NothingButton(
-            label: 'COS',
-            caption: 'cos',
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.applyUnaryScientific('cos'),
-          ),
-          NothingButton(
-            label: 'LOG',
-            caption: 'log',
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.applyUnaryScientific('log'),
-          ),
-        ],
-      ).animate().fade(duration: 290.ms, curve: Curves.easeIn),
-      // Row 4 (aligns with 1/2/3 row)
-      _keypadRow(
-        flexes: const [1, 1],
-        children: [
-          NothingButton(
-            label: 'TAN',
-            caption: 'tan',
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.applyUnaryScientific('tan'),
-          ),
-          NothingButton(
-            label: '√',
-            caption: 'sqrt',
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.applyUnaryScientific('sqrt'),
-          ),
-        ],
-      ).animate().fade(duration: 310.ms, curve: Curves.easeIn),
-      // Row 5 (aligns with 0/./= row)
-      _keypadRow(
-        flexes: const [1, 1],
-        children: [
-          NothingButton(
-            label: '(',
-            caption: 'left',
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.inputBracket('('),
-          ),
-          NothingButton(
-            label: ')',
-            caption: 'right',
-            foregroundColor: AppColors.activeText,
-            onPressed: () => controller.inputBracket(')'),
-          ),
-        ],
-      ).animate().fade(duration: 330.ms, curve: Curves.easeIn),
     ];
   }
 
@@ -396,10 +247,7 @@ class CalculatorKeypad extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (var i = 0; i < children.length; i++)
-          Expanded(
-            flex: flexes[i],
-            child: children[i],
-          ),
+          Expanded(flex: flexes[i], child: children[i]),
       ],
     );
   }

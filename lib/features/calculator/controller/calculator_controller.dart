@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/foundation.dart';
 
 import '../../../glyph/glyph_feedback.dart';
@@ -30,6 +28,7 @@ class CalculatorController extends ChangeNotifier {
   List<HistoryEntry> get history => List<HistoryEntry>.unmodifiable(_history);
   bool get scientificMode => _scientificMode;
   String? get dotMatrixOperationSymbol => _dotMatrixOp;
+  bool get afterEquals => _afterEquals;
 
   void toggleScientific() {
     _scientificMode = !_scientificMode;
