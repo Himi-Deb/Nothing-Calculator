@@ -5,9 +5,12 @@ abstract final class DisplayFormat {
   static final NumberFormat _groupInt = NumberFormat('#,##0', 'en_US');
   static final NumberFormat _groupFrac = NumberFormat('#,##0.00', 'en_US');
 
-  /// Formats a raw operand string while typing (`1240`, `3.`, `0.5`).
+  /// Formats a raw operand string while typing (`1240`, `3.`, `0.5`, `sin(`).
   static String formatOperand(String raw) {
     if (raw.isEmpty) return '0';
+    // If the token is a function or algebraic component, return it as-is
+    if (RegExp(r'[a-zA-Z(]').hasMatch(raw)) return raw;
+
     var s = raw.replaceAll(',', '');
     final neg = s.startsWith('-');
     if (neg) s = s.substring(1);

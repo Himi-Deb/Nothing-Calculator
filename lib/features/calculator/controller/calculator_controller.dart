@@ -93,12 +93,19 @@ class CalculatorController extends ChangeNotifier {
     if (_afterEquals) {
       _afterEquals = false;
       _clearFrozen();
+      _current = '0';
+      _chunks.clear();
     }
-    final v = double.tryParse(_sanitizeNumber(_current)) ?? 0;
-    if (v == 0) return;
-    final r = 1 / v;
-    if (!r.isFinite) return;
-    _current = _stripTrailingZeros(r.toString());
+    
+    if (_current != '0') {
+      _chunks.add(_sanitizeNumber(_current));
+      _chunks.add('*');
+      _current = '0';
+    } else if (_chunks.isNotEmpty && _chunks.last == ')') {
+      _chunks.add('*');
+    }
+    
+    _chunks.add('1/(');
     notifyListeners();
   }
 
@@ -317,7 +324,7 @@ class CalculatorController extends ChangeNotifier {
         b.write(' ');
         b.write(_uiOperator(c));
         b.write(' ');
-      } else if (c == '(' || c == ')') {
+      } else if (c == '(' || c == ')' || RegExp(r'[a-zA-Z]').hasMatch(c)) {
         b.write(c);
       } else {
         b.write(DisplayFormat.formatOperand(c));
