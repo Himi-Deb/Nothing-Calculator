@@ -325,7 +325,11 @@ class CalculatorController extends ChangeNotifier {
         b.write(_uiOperator(c));
         b.write(' ');
       } else if (c == '(' || c == ')' || RegExp(r'[a-zA-Z]').hasMatch(c)) {
-        b.write(c);
+        if (c == 'sqrt(') {
+          b.write('√(');
+        } else {
+          b.write(c);
+        }
       } else {
         b.write(DisplayFormat.formatOperand(c));
       }
