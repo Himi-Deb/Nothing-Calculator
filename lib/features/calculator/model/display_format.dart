@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 /// Locale-style grouping for the Calci-App display (commas, optional decimals).
 abstract final class DisplayFormat {
   static final NumberFormat _groupInt = NumberFormat('#,##0', 'en_US');
-  static final NumberFormat _groupFrac = NumberFormat('#,##0.00', 'en_US');
+  static final NumberFormat _groupFrac = NumberFormat('#,##0.##########', 'en_US');
 
   /// Formats a raw operand string while typing (`1240`, `3.`, `0.5`, `sin(`).
   static String formatOperand(String raw) {

@@ -97,14 +97,18 @@ class CalculatorController extends ChangeNotifier {
     }
     
     if (_current != '0') {
+      // Wrap the current value: 1/(value)
+      _chunks.add('1/(');
       _chunks.add(_sanitizeNumber(_current));
-      _chunks.add('*');
+      _chunks.add(')');
       _current = '0';
     } else if (_chunks.isNotEmpty && _chunks.last == ')') {
+      // After a closed group, open a new multiplied inverse: × 1/(
       _chunks.add('*');
+      _chunks.add('1/(');
+    } else {
+      _chunks.add('1/(');
     }
-    
-    _chunks.add('1/(');
     notifyListeners();
   }
 
@@ -147,8 +151,15 @@ class CalculatorController extends ChangeNotifier {
       _current = '0';
       _chunks.clear();
     }
-    
-    // Focus active typing buffer to memory string
+
+    // Block a closing bracket when there is no unmatched opening bracket.
+    if (bracket == ')') {
+      final openCount = _chunks.where((c) => c.contains('(')).length;
+      final closeCount = _chunks.where((c) => c == ')').length;
+      if (closeCount >= openCount) return;
+    }
+
+    // Flush active typing buffer to chunks before inserting bracket.
     if (_current != '0') {
       _chunks.add(_sanitizeNumber(_current));
       _current = '0';

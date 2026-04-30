@@ -209,13 +209,6 @@ class _SelectableDisplayText extends StatelessWidget {
         },
       ),
       ContextMenuButtonItem(
-        label: 'Cut',
-        onPressed: () {
-          Clipboard.setData(ClipboardData(text: selectedText));
-          ContextMenuController.removeAny();
-        },
-      ),
-      ContextMenuButtonItem(
         label: 'Share',
         onPressed: () {
           ContextMenuController.removeAny();

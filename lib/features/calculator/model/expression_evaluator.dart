@@ -93,12 +93,14 @@ abstract final class ExpressionEvaluator {
   }
 
   /// `true` when evaluation is more than a single literal number (glyph policy).
+  /// Checks the raw eval string (not normalized) to avoid false positives from
+  /// degree-conversion operator injection inside trig functions.
   static bool hasBinaryOperation(String uiExpression) {
-    final n = normalizeForParser(uiExpression);
-    if (n.isEmpty) return false;
-    if (n.contains('+') || n.contains('*') || n.contains('/') || n.contains('^')) {
+    final s = uiExpression.replaceAll(' ', '').replaceAll(',', '');
+    if (s.isEmpty) return false;
+    if (s.contains('+') || s.contains('*') || s.contains('/') || s.contains('^')) {
       return true;
     }
-    return RegExp(r'\d-\d').hasMatch(n);
+    return RegExp(r'\d-\d').hasMatch(s);
   }
 }
